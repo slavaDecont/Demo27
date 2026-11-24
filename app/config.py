@@ -68,6 +68,10 @@ class BaseConfig:
     SQLALCHEMY_POOL_RECYCLE = int(os.getenv("SQLALCHEMY_POOL_RECYCLE", "3600"))
     SQLALCHEMY_ECHO = os.getenv("SQLALCHEMY_ECHO", "false").lower() == "true"
 
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    if not SECRET_KEY:
+       raise RuntimeError("SECRET_KEY must be set in environment")
+
 
 class DevelopmentConfig(BaseConfig):
     """Конфигурация для среды разработки."""

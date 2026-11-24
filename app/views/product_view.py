@@ -6,6 +6,7 @@ from app.services.product_service import ProductService
 from app.models import ProductPrice
 from app.extensions import db
 from sqlalchemy import select
+from flask_login import login_required
 
 products_bp = Blueprint("products", __name__)
 

@@ -5,12 +5,14 @@ from flask import request, Blueprint
 from app.views.base_view import BaseAPIView
 from app.services.production_order_service import ProductionOrderService
 from app.models import ProductionOrder, ProductionOrderItem
+from flask_login import login_required
 
 production_orders_bp = Blueprint("production_orders", __name__)
 
 
 class ProductionOrderListAPI(BaseAPIView):
     """Список и создание заказов на производство."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = ProductionOrderService()
@@ -101,6 +103,7 @@ class ProductionOrderListAPI(BaseAPIView):
 
 class ProductionOrderDetailAPI(BaseAPIView):
     """Получение заказа на производство."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = ProductionOrderService()

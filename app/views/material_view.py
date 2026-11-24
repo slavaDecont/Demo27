@@ -6,12 +6,14 @@ from app.services.material_service import MaterialService
 from app.models import MaterialPrice
 from app.extensions import db
 from sqlalchemy import select
+from flask_login import login_required
 
 materials_bp = Blueprint("materials", __name__)
 
 
 class MaterialListAPI(BaseAPIView):
     """Список и создание материалов."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = MaterialService()
@@ -48,6 +50,7 @@ class MaterialListAPI(BaseAPIView):
 
 class MaterialDetailAPI(BaseAPIView):
     """Получение, обновление, удаление материала."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = MaterialService()
@@ -100,6 +103,7 @@ class MaterialDetailAPI(BaseAPIView):
 
 class MaterialPriceAPI(BaseAPIView):
     """Управление ценой материала."""
+    decorators = [login_required]
 
     def put(self, material_id):
         """Обновление цены."""

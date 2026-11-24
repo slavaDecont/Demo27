@@ -37,6 +37,10 @@ class BaseAPIView(MethodView):
     Студенты: все конкретные View (ClientView, ProductView) наследуются от этого класса.
     Они переопределяют get(), post(), put(), delete() для своей логики,
     но могут использовать self._success_response(), self._error_response() и т.д.
+
+    Наследники должны задавать `decorators = [login_required]`,
+    если эндпоинт требует авторизации.
+
     """
 
     decorators = []

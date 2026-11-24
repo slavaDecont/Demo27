@@ -3,12 +3,15 @@ import uuid
 from flask import request, Blueprint
 from app.views.base_view import BaseAPIView
 from app.services.client_service import ClientService
+from flask_login import login_required
 
 clients_bp = Blueprint("clients", __name__)
 
 
 class ClientListAPI(BaseAPIView):
     """Список и создание клиентов."""
+
+    decorators = [login_required]
 
     def __init__(self):
         self.service = ClientService()
@@ -36,6 +39,8 @@ class ClientListAPI(BaseAPIView):
 
 class ClientDetailAPI(BaseAPIView):
     """Получение, обновление, удаление клиента."""
+
+    decorators = [login_required]
 
     def __init__(self):
         self.service = ClientService()

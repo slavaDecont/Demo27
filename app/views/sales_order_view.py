@@ -5,12 +5,14 @@ from flask import request, Blueprint
 from app.views.base_view import BaseAPIView
 from app.services.sales_order_service import SalesOrderService
 from app.models import SalesOrder, SalesOrderItem, Product, ProductionOrder
+from flask_login import login_required
 
 sales_orders_bp = Blueprint("sales_orders", __name__)
 
 
 class SalesOrderListAPI(BaseAPIView):
     """Список и создание заказов."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = SalesOrderService()
@@ -236,6 +238,7 @@ class SalesOrderListAPI(BaseAPIView):
 
 class SalesOrderDetailAPI(BaseAPIView):
     """Получение, обновление и удаление заказа."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = SalesOrderService()
@@ -488,6 +491,7 @@ class SalesOrderDetailAPI(BaseAPIView):
 
 class SalesOrderCostCalculationAPI(BaseAPIView):
     """Расчёт стоимости заказа."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = SalesOrderService()
@@ -508,6 +512,7 @@ class SalesOrderCostCalculationAPI(BaseAPIView):
 
 class SalesOrderProductionAPI(BaseAPIView):
     """Получение связанного заказа на производство."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = SalesOrderService()

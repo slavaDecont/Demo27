@@ -6,12 +6,14 @@ from app.services.operation_service import OperationService
 from app.models import OperationPrice
 from app.extensions import db
 from sqlalchemy import select
+from flask_login import login_required
 
 operations_bp = Blueprint("operations", __name__)
 
 
 class OperationListAPI(BaseAPIView):
     """Список и создание операций."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = OperationService()
@@ -48,6 +50,7 @@ class OperationListAPI(BaseAPIView):
 
 class OperationDetailAPI(BaseAPIView):
     """Получение, обновление, удаление операции."""
+    decorators = [login_required]
 
     def __init__(self):
         self.service = OperationService()
@@ -100,6 +103,7 @@ class OperationDetailAPI(BaseAPIView):
 
 class OperationPriceAPI(BaseAPIView):
     """Управление ценой операции."""
+    decorators = [login_required]
 
     def put(self, operation_id):
         """Обновление цены."""

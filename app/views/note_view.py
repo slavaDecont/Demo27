@@ -5,11 +5,13 @@ from sqlalchemy import select, func
 from app.models import Note, User
 from app.utils import build_note_response
 from app.extensions import db
+from flask_login import login_required
 
 notes_bp = Blueprint("notes", __name__)
 
 
 @notes_bp.route("/", methods=["GET"])
+@login_required
 def get_notes():
     """Список заметок."""
     try:
@@ -33,6 +35,7 @@ def get_notes():
 
 
 @notes_bp.route("/<int:note_id>", methods=["GET"])
+@login_required
 def get_note(note_id):
     """Получение одной заметки."""
     try:

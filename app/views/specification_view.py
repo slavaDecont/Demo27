@@ -5,12 +5,14 @@ from app.views.base_view import BaseAPIView
 from app.models import SpecificationMaterial, SpecificationOperation, MaterialPrice, OperationPrice
 from app.extensions import db
 from sqlalchemy import select
+from flask_login import login_required
 
 specifications_bp = Blueprint("specifications", __name__)
 
 
 class SpecificationMaterialListAPI(BaseAPIView):
     """Список и создание спецификаций материалов."""
+    decorators = [login_required]
 
     def get(self):
         """Список спецификаций материалов с наименованиями и ценами."""
@@ -63,6 +65,7 @@ class SpecificationMaterialListAPI(BaseAPIView):
 
 class SpecificationOperationListAPI(BaseAPIView):
     """Список и создание спецификаций операций."""
+    decorators = [login_required]
 
     def get(self):
         """Список спецификаций операций с наименованиями и ценами."""

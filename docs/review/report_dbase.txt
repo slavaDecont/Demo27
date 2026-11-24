@@ -1,0 +1,24 @@
+---
+
+## Таблица замечаний по маршрутам и БД (отдельно, для вставки)
+
+```markdown
+| № | Объект | Тип | Проблема | Приоритет | Рекомендация |
+|---|--------|-----|----------|-----------|--------------|
+| 1 | `production_orders` (schema.sql) | БД | Нет колонки `sales_order_id`, есть в модели | Критический | Добавить `ALTER TABLE ... ADD COLUMN` |
+| 2 | `models.py` | БД | `UUID`/`gen_random_uuid()` несовместимы с SQLite | Критический | TypeDecorator + `default=uuid.uuid4` |
+| 3 | `views/production_order_view.py` POST/PUT | Маршрут | `date.fromisoformat` без try/except → 500 | Высокий | try/except → 400 |
+| 4 | `views/sales_order_view.py` POST/PUT | Маршрут | `date.fromisoformat`, `float()` без try/except → 500 | Высокий | try/except → 400 |
+| 5 | `views/clients.py` POST | Маршрут | Нет проверки `client_type` → 500 при CHECK | Высокий | Валидация enum → 400 |
+| 6 | `views/materials.py`, `operations.py`, `products.py` PUT `/price` | Маршрут | Нет проверки `price` (число, `>= 0`) → 500 | Высокий | Валидация → 400 |
+| 7 | `calculate_order_cost.sql` vs `SalesOrderService` | БД/логика | `discount` — % в коде, абсолют в SQL | Высокий | Привести к % |
+| 8 | `views/production_order_view.py`, `sales_order_view.py` | Маршрут/БД | Генерация номера через `text()` → гонка данных | Высокий | Sequence / `FOR UPDATE` |
+| 9 | `views/specifications.py` POST | Маршрут | Нет проверки `quantity_per_unit > 0`, `time_norm > 0` | Средний | Валидация → 400 |
+| 10 | `views/materials.py`, `operations.py`, `products.py` POST | Маршрут | Дубликат `code` → 500 | Средний | try/except IntegrityError → 409 |
+| 11 | `services/auth_service.py` | Маршрут | Сервис возвращает `jsonify` — нарушение слоёв | Средний | Возвращать результат, ответ — во view |
+| 12 | Все CBV | Маршрут | Нет `db.session.rollback()` при `IntegrityError` | Средний | try/except + rollback |
+| 13 | `schema.sql` | БД | Нет индекса на `production_orders.sales_order_id` | Средний | `CREATE INDEX` |
+| 14 | `schema.sql` | БД | Пароли-заглушки в тестовых данных | Средний | Реальные хеши |
+| 15 | `views/sales_order_view.py` | Маршрут | DEBUG-принты | Низкий | Удалить |
+| 16 | `blueprints/*.py` (legacy) | Структура | Не подключены, содержат баги | Низкий | Удалить |
+| 17 | `models.py` | БД | `create_app()` вызывает `db.create_all()` — дублирование с фикстурой | Низкий | Убрать из `create_app()` или сделать условным |
